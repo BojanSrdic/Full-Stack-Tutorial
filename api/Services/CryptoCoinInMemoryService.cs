@@ -1,13 +1,13 @@
-using DotNet.Data;
-using DotNet.Models;
+using Api.Data;
+using Api.Models;
 
-namespace DotNet.Services
+namespace Api.Services
 {
-	public class CryptoCoinService : ICryptoCoinService
+	public class CryptoCoinInMemoryService : ICryptoCoinService
 	{
-		private readonly DatabaseContext _context;
+		private readonly DbConnection _context;
 
-		public CryptoCoinService(DatabaseContext context)
+		public CryptoCoinInMemoryService(DbConnection context)
 		{
 			_context = context;
 		}
@@ -15,7 +15,7 @@ namespace DotNet.Services
 		public void CreateCryptoCoin(CryptoCoin model)
 		{
 			// Todo: Mapp domain models and data transfer objects
-			var user = new CryptoCoin
+			var item = new CryptoCoin
 			{
 				Name = model.Name,
 				Amount = model.Amount,
@@ -23,7 +23,7 @@ namespace DotNet.Services
 			};
 
 			// Todo: Add new models to tables in db and save changes
-			_context.CryptoCoins.Add(user);
+			_context.CryptoCoins.Add(item);
 			_context.SaveChanges();
 		}
 

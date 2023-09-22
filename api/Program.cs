@@ -1,6 +1,8 @@
-using DotNet.Data;
-using DotNet.DbConnection;
-using DotNet.Services;
+using System.Data;
+using Api.Data;
+using Api.Services;
+using Api.Services.DapperPoc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,12 +11,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Configure Database connection
-builder.Services.AddDbContext<DatabaseContext>(option => option.UseInMemoryDatabase("InMemory"));
+// Configure Database connection InMemory and SQL
+// builder.Services.AddDbContext<DbConnection>(option => option.UseInMemoryDatabase("InMemoryConnection"));
 
-builder.Services.AddScoped<ICryptoCoinService, CryptoCoinService>();
+// Configure the SQL Server database connection for Entity Framework
+builder.Services.AddDbContext<DbConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnection")));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configure the SQL Server database connection for Dapper
+builder.Services.AddSingleton<IDbConnection>(provider => new SqlConnection(provider.GetRequiredService<IConfiguration>().GetConnectionString("SQLConnection")));
+
+//DI
+builder.Services.AddScoped<ICryptoCoinService, CryptoCoinInMemoryService>();
+builder.Services.AddScoped<ICryptoCoinDapperService, CryptoCoinDapperService>();
+
+// Swagger configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,14 +42,14 @@ app.UseHttpsRedirection();
 // Add CORS middleware
 app.UseCors(builder =>
 {
-    builder.WithOrigins("http://localhost:3000") // Replace with your React app's URL
+    builder.WithOrigins("http://localhost:3000")
            .AllowAnyHeader()
            .AllowAnyMethod();
 });
 
 app.UseAuthorization();
 
-InMemorySeedData.AddTestDataInMemory(app.Services);
+//InMemorySeedData.AddTestDataInMemory(app.Services);
 
 app.MapControllers();
 

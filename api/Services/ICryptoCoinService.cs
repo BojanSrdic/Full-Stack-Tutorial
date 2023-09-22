@@ -1,7 +1,7 @@
 
-using DotNet.Models;
+using Api.Models;
 
-namespace DotNet.Services
+namespace Api.Services
 {
 	public interface ICryptoCoinService
 	{

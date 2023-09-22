@@ -1,18 +1,17 @@
-using DotNet.Data;
-using DotNet.Models;
+using Api.Models;
 
-namespace DotNet.DbConnection
+namespace Api.Data
 {
 	public class InMemorySeedData
 	{
 		public static void AddTestDataInMemory(IServiceProvider serviceProvider)
 		{
 			using var scope = serviceProvider.CreateScope();
-			var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+			var context = scope.ServiceProvider.GetRequiredService<DbConnection>();
 			SeedData(context);
 		}
 
-		private static void SeedData(DatabaseContext context)
+		private static void SeedData(DbConnection context)
 		{
 			var coins = new[]
 			{

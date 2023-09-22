@@ -1,8 +1,8 @@
-using DotNet.Models;
-using DotNet.Services;
+using Api.Models;
+using Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DotNet.Controllers
+namespace Api.Controllers
 {
 	[Route("api/crypto-coins")]
 	[ApiController]
