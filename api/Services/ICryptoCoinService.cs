@@ -1,4 +1,5 @@
 
+using Api.Dto;
 using Api.Models;
 
 namespace Api.Services
@@ -7,7 +8,7 @@ namespace Api.Services
 	{
 		CryptoCoin GetCryptoCoin(int id);
 		List<CryptoCoin> GetCryptoCoins();
-		void CreateCryptoCoin(CryptoCoin model);
+		void CreateCryptoCoin(CreateNewCryptoCoin model);
 		void UpdataCryptoCoin(CryptoCoin model);
 		void DeleteCryptoCoin(int id);
 	}

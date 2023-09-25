@@ -1,3 +1,4 @@
+using Api.Dto;
 using Api.Models;
 using Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace Api.Controllers
 
 		// POST: api/crypto-coins
 		[HttpPost]
-		public IActionResult Create([FromBody] CryptoCoin model)
+		public IActionResult Create([FromBody] CreateNewCryptoCoin model)
 		{
 			_cryptoCoinService.CreateCryptoCoin(model);
 
@@ -55,7 +56,7 @@ namespace Api.Controllers
 			if(item == null)
 				return NotFound("Crypto coin doesn't exist");
 
-			var read = new CryptoCoin { Name = item.Name, Amount = item.Amount };
+			var read = new ReadCryptoCoin { Name = item.Name, Amount = item.Amount };	// add prop "profit"
 
 			return Ok(read);
 		}

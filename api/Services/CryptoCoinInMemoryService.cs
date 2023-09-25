@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.Dto;
 using Api.Models;
 
 namespace Api.Services
@@ -12,14 +13,14 @@ namespace Api.Services
 			_context = context;
 		}
 
-		public void CreateCryptoCoin(CryptoCoin model)
+		public void CreateCryptoCoin(CreateNewCryptoCoin model)
 		{
-			// Todo: Mapp domain models and data transfer objects
+			// Todo: Add auto mapper
 			var item = new CryptoCoin
 			{
 				Name = model.Name,
 				Amount = model.Amount,
-				CurrentPrice = model.CurrentPrice
+				BuyPrice = model.BuyPrice
 			};
 
 			// Todo: Add new models to tables in db and save changes
