@@ -1,17 +1,40 @@
 using System.Data;
 using Api.Data;
+using Api.Extensions;
 using Api.Services;
 using Api.Services.DapperPoc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Serilog configuration
 
-builder.Services.AddControllers();
+// builder.Host.ConfigureLogging(logging =>
+// {
+//     logging.ClearProviders(); // Remove the default logging providers
+//     logging.AddSerilog(); // Use Serilog as the logger
+// });
 
-// Configure Database connection InMemory and SQL
+// Load the configuration from appsettings.json
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(builder.Environment.ContentRootPath) // Set the base path to the project's root directory
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
+
+#endregion
+
+#region Database configuration
+
+// Configure Database connection InMemory
 // builder.Services.AddDbContext<DbConnection>(option => option.UseInMemoryDatabase("InMemoryConnection"));
 
 // Configure the SQL Server database connection for Entity Framework
@@ -20,13 +43,25 @@ builder.Services.AddDbContext<DbConnection>(options => options.UseSqlServer(buil
 // Configure the SQL Server database connection for Dapper
 builder.Services.AddSingleton<IDbConnection>(provider => new SqlConnection(provider.GetRequiredService<IConfiguration>().GetConnectionString("SQLConnection")));
 
+// To Do: ADO.NET
+
+// Elastic Search - exstension methode
+builder.Services.AddElasticSearch(builder.Configuration);
+
+#endregion
+
+#region Swagger configuration
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+#endregion
+
+builder.Services.AddControllers();
+
 //DI
 builder.Services.AddScoped<ICryptoCoinService, CryptoCoinInMemoryService>();
 builder.Services.AddScoped<ICryptoCoinDapperService, CryptoCoinDapperService>();
-
-// Swagger configuration
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

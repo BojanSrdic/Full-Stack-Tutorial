@@ -10,10 +10,12 @@ namespace Api.Controllers
 	public class CryptoCoinController : ControllerBase
 	{
 		private readonly ICryptoCoinService _cryptoCoinService;
+		private readonly ILogger<CryptoCoinController> _logger;
 
-		public CryptoCoinController(ICryptoCoinService cryptoCoinService)
+		public CryptoCoinController(ICryptoCoinService cryptoCoinService, ILogger<CryptoCoinController> logger)
 		{
 			_cryptoCoinService = cryptoCoinService;
+			_logger = logger;
 		}
 
 		// POST: api/crypto-coins
@@ -44,6 +46,7 @@ namespace Api.Controllers
 		[HttpGet]
 		public IActionResult GetList()
 		{
+			_logger.LogInformation("Log testing");
 			return Ok(_cryptoCoinService.GetCryptoCoins());
 		}
 

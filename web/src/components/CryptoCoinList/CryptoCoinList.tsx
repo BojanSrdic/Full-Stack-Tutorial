@@ -4,7 +4,7 @@ import { CryptoCoinService } from '../../services/StudentService';
 import "./CryptoCoinList.css";
 
 function CryptoCoinList() {
-   const [cryptoCoins, setCryptoCoins] = useState([] as CryptoCoin[]);    // State to store the list of students
+   const [cryptoCoins, setCryptoCoins] = useState([] as CryptoCoin[]);    // State to store the list of Crypto coins
    const [selectedCryptoCoin, setSelectedCryptoCoin] = useState<CryptoCoin | null>(null); // State to store the selected coin for editing
    const [isEditing, setIsEditing] = useState(false); // State to track whether editing mode is active
    const [isAdding, setIsAdding] = useState(false);

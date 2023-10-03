@@ -10,24 +10,32 @@
    - dotnet add package Microsoft.EntityFrameworkCore --version 6.0.22
    - dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 6.0.22
    - dotnet add package Microsoft.EntityFrameworkCore.Design --version 6.0.0
-   - dotnet add package Dapper --version 2.0.151
-   - dotnet add package System.Data.SqlClient --version 4.8.5
+   - dotnet add package Dapper --version 2.0.151                                    ** Dapper
+   - dotnet add package System.Data.SqlClient --version 4.8.5                       ** Dapper
+   - dotnet add package NEST                                                        ** Elastic Search
    
 
 ## packages
    - npm install axios  -- Axios is used to make HTTP requests to your .NET 6 API
 
 ## Start api
+   - dotnet build
    - dotnet run
    - docker build -t test-image .
    - docker run -d -p 5000:80 --name test-container test-image
    - docker-compose up
+   - docker-compose down
 
 ## Start web
    - npm start
    - docker build -t react-app .
    - docker run -p 3000:3000 react-app
    - docker-compose up
+   - docker-compose down
+
+## Connection stirng
+   - "Data Source=BSRDIC;Initial Catalog=master;Integrated Security=True"  - local database
+   - "Server=db;Database=master;User=sa;Password=S3cur3P@ssW0rd!;"         - docker container
 
 
 src/

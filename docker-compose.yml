@@ -1,4 +1,17 @@
 version: "3.8"
+
+# networks:
+#   elastic-network:
+#     driver: bridge
+#   api-network:
+#   web-network:
+
+# volumes:
+#  elasticsearch-data:
+#    driver: local
+#  kibana-data:
+#    driver: local  
+
 services:
   api:
     build:
@@ -9,6 +22,19 @@ services:
       - "5000:80"
     environment:
       - ASPNETCORE_URLS=http://+:80
+    # networks:
+    #   - api-network
+
+  sql:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server2022
+    ports:
+      - "1433:1433" 
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=S3cur3P@ssW0rd!
+    # networks:
+    #   - api-network
   
   web:
     build:
@@ -16,3 +42,38 @@ services:
     container_name: web-docker-container
     ports:
       - '3000:3000'
+    # networks:
+    #   - web-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
+    container_name: elasticsearch-docker-container
+    ports:
+      - '9200:9200'
+    # volumes:
+    #   - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    # networks:
+    #   - elastic-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.13
+    container_name: kibana-docker-container
+    ports:
+     - 5601:5601
+    depends_on:
+      - elasticsearch
+    # networks:
+    #   - elastic-network
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    # volumes:
+    #   - kibana-data:/usr/share/kibana/data
+    # deploy:    
+    #   resources:
+    #       limits:
+    #         cpus: '2.0'
+    #       reservations:
+    #         cpus: '1.0'
